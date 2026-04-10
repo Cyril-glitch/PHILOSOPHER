@@ -1,50 +1,64 @@
 #ifndef PHILO_H
-#   define PHILO_H
+# define PHILO_H
 
-# include "../libft/inc/libft.h"
-# include "../libft/inc/ft_printf.h"
-# include "../libft/inc/colors.h"
+# include "../inc/colors.h"
 # include <pthread.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/time.h>
+# include <unistd.h>
 
 typedef struct s_data
 {
-    int                 nb_philo;
-    int                 time_to_die;
-    int                 time_to_eat;
-    int                 time_to_sleep;
-    int                 must_eat;
+	int						nb_philo;
+	int						time_to_die;
+	int						time_to_eat;
+	int						time_to_sleep;
+	int						must_eat;
 
-    long                start_time;
+	long					start_time;
 
-    volatile __sig_atomic_t               stop;
+	volatile __sig_atomic_t	stop;
 
-    pthread_mutex_t     stop_mutex;
-    pthread_mutex_t     print_mutex;
+	pthread_mutex_t			stop_mutex;
+	pthread_mutex_t			print_mutex;
 
-    pthread_mutex_t     *forks;
+	pthread_mutex_t			*forks;
 
-    struct s_philo      *philos;
+	struct s_philo			*philos;
 
-}   t_data;
+}							t_data;
 
 typedef struct s_philo
 {
-    int             id;
-    pthread_t       thread;
+	int						id;
+	pthread_t				thread;
 
-    long            last_meal;
-    int             meals_eaten;
+	long					last_meal;
+	int						meals_eaten;
 
-    pthread_mutex_t *left_fork;
-    pthread_mutex_t *right_fork;
+	pthread_mutex_t			*left_fork;
+	pthread_mutex_t			*right_fork;
 
-    t_data          *data;
+	t_data					*data;
 
-}   t_philo;
+}							t_philo;
 
+//INIT
+int							ft_init_data(int ac, char **av, t_data **data);
+void						ft_init_start_time(t_data *data);
 
-int    ft_init_data(int ac,char **av, t_data **data);
+//UTILS
+int							ft_isdigit(int c);
+int							ft_isspace(int c);
+int							ft_atoi(const char *nptr);
+int							ft_isfull_dig(char *s);
 
+//UTILS_2
+int							ft_strlen(char *s);
+void						ft_putstr_fd(char *s, int fd);
 
+//ROUTINE
+void	*ft_routine(void *args);
 
 #endif
