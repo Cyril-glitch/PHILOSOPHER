@@ -9,7 +9,11 @@ SRC = src/main.c \
 	  src/utils.c \
 	  src/utils_2.c \
 	  src/init.c \
-	  src/routine.c
+	  src/routine.c \
+	  src/monitoring.c \
+	  src/cleaning.c \
+
+
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC:.c=.o)))
 

@@ -20,22 +20,16 @@ static int	ft_init_settings(int ac, char **av, t_data *data)
 			return (ft_putstr_fd(B_L_RED "WRONG ARGUMENT\n" RESET, 2), 0);
 	}
 	data->nb_philo = ft_atoi(av[1]);
-	printf("nb_philo = %d\n", data->nb_philo);
 	data->time_to_die = ft_atoi(av[2]);
-	printf("time_to_die = %d\n", data->time_to_die);
 	data->time_to_eat = ft_atoi(av[3]);
-	printf("time_to_eat = %d\n", data->time_to_eat);
 	data->time_to_sleep = ft_atoi(av[4]);
-	printf("time_to_sleep = %d\n", data->time_to_sleep);
 	data->time_to_eat = ft_atoi(av[3]);
 	if (ac > 5)
 		data->must_eat = ft_atoi(av[5]);
 	else
 		data->must_eat = 0;
-	printf("must_eat = %d\n", data->must_eat);
 	data->stop = 0;
     data->start_time = 0;
-	printf("start_time = %ld\n", data->start_time);
 	return (1);
 }
 
@@ -48,28 +42,30 @@ static int	ft_init_mutex(t_data *data)
 	if (!data->forks)
 		return (ft_putstr_fd(B_L_RED "MEMMORY ALLOCATION FAIL (FORKS)" RESET,
 				2), 0);
-	while (i > data->nb_philo)
+	while (i < data->nb_philo)
 		pthread_mutex_init(&data->forks[i++], NULL);
 	pthread_mutex_init(&data->stop_mutex, NULL);
 	pthread_mutex_init(&data->print_mutex, NULL);
+
+	pthread_mutex_lock(&data->print_mutex);
+
 	return (1);
 }
 
 static	int	ft_init_philo(t_data *data)
 {
 	int	i;
-	pthread_t	*tmp;
 
 	i = 0;
 	data->philos = malloc(sizeof(t_philo) * data->nb_philo);
 	if (!data->philos)
 		return (ft_putstr_fd(B_L_RED "MEMMORY ALLOCATION FAIL (PHILOS)" RESET,
 				2), 0);
-	while(i > data->nb_philo)
+	while(i < data->nb_philo)
 	{
 		data->philos[i].id = i;
-		data->philos[i].thread = pthread_create(tmp, NULL, ft_routine, &data->philos);
-		tmp = NULL;
+		data->philos[i].data = data; 
+		pthread_create(&data->philos[i].thread, NULL, ft_routine, &data->philos);
 		data->philos[i].last_meal = 0;
 		data->philos[i].meals_eaten = 0;
 		if (i == 0)
@@ -80,7 +76,6 @@ static	int	ft_init_philo(t_data *data)
 			data->philos[i].right_fork = &data->forks[0];
 		else
 			data->philos[i].right_fork = &data->forks[i + 1];
-		data->philos[i].data = data; 
 		i++;
 	}
 	return 1;

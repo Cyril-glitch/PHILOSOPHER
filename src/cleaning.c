@@ -1,0 +1,19 @@
+#include    "../inc/philo.h"
+
+void ft_thread_join(t_data *data)
+{
+    int i;
+
+    i = 0;
+    while (i < data->nb_philo)
+        pthread_join(data->philos[i++].thread, NULL);
+}
+
+void    ft_mutex_destroy(t_data *data)
+{
+    int i;
+
+    i = 0;
+    while (i < data->nb_philo)
+        pthread_mutex_destroy(&data->forks[i++]);
+}

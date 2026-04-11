@@ -61,4 +61,12 @@ void						ft_putstr_fd(char *s, int fd);
 //ROUTINE
 void	*ft_routine(void *args);
 
+//MONITORING
+void    ft_data_display(t_data *data);
+
+//CLEANING
+
+void ft_thread_join(t_data *data);
+void    ft_mutex_destroy(t_data *data);
+
 #endif
