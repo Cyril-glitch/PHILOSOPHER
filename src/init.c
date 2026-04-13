@@ -1,6 +1,6 @@
 #include "../inc/philo.h"
 
-void	ft_init_start_time(t_data *data)
+static void	ft_init_start_time(t_data *data)
 {
 	struct timeval	tv;
 
@@ -47,8 +47,6 @@ static int	ft_init_mutex(t_data *data)
 	pthread_mutex_init(&data->stop_mutex, NULL);
 	pthread_mutex_init(&data->print_mutex, NULL);
 
-	pthread_mutex_lock(&data->print_mutex);
-
 	return (1);
 }
 
@@ -63,9 +61,9 @@ static	int	ft_init_philo(t_data *data)
 				2), 0);
 	while(i < data->nb_philo)
 	{
-		data->philos[i].id = i;
+		data->philos[i].id = i + 1;
 		data->philos[i].data = data; 
-		pthread_create(&data->philos[i].thread, NULL, ft_routine, &data->philos);
+		pthread_create(&data->philos[i].thread, NULL, ft_routine, data->philos);
 		data->philos[i].last_meal = 0;
 		data->philos[i].meals_eaten = 0;
 		if (i == 0)
@@ -81,7 +79,7 @@ static	int	ft_init_philo(t_data *data)
 	return 1;
 }
 
-int	ft_init_data(int ac, char **av, t_data **data)
+int	ft_init_simulation(int ac, char **av, t_data **data)
 {
 	*data = malloc(sizeof(t_data));
 	if (!*data)
@@ -90,6 +88,7 @@ int	ft_init_data(int ac, char **av, t_data **data)
 		return (0);
 	if (!ft_init_mutex(*data))
 		return (0);
+	ft_init_start_time(*data);
 	if (!ft_init_philo(*data))
 		return (0);
 	return (1);
