@@ -1,20 +1,16 @@
 #include "../inc/philo.h"
 
-int ft_strlen(char *s)
+long	ft_gettime(void)
 {
-    int i;
+	struct timeval	tv;
 
-    i = 0;
-    while(s[i])
-        i++;
-    return (i);
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_usec / 1000) + (tv.tv_sec * 1000));
 }
 
-void	ft_putstr_fd(char *s, int fd)
+long	ft_timer(long start_time)
 {
-	if (!s)
-		return ;
-	write(fd, s, ft_strlen(s));
+	return (ft_gettime() - start_time);
 }
 
 void    ft_display_logs(t_philo *philo,long  time,char *logs)

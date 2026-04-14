@@ -7,7 +7,7 @@ OBJ_DIR = obj
 
 SRC = src/main.c \
 	  src/utils.c \
-	  src/utils_2.c \
+	  src/timelogs.c \
 	  src/init.c \
 	  src/routine.c \
 	  src/monitoring.c \

@@ -25,7 +25,7 @@ typedef struct s_data
 
 	pthread_mutex_t			*forks;
 
-	struct s_philo			*philos;
+	struct s_philo			*philo;
 
 	pthread_t				monitor;
 
@@ -51,21 +51,24 @@ int							ft_init_simulation(int ac, char **av, t_data **data);
 long						ft_gettime(void);
 
 //UTILS
+
+int							ft_strlen(char *s);
+void						ft_putstr_fd(char *s, int fd);
 int							ft_isdigit(int c);
 int							ft_isspace(int c);
 int							ft_isfull_dig(char *s);
 int							ft_atoi(const char *nptr);
 
-//UTILS_2
-int							ft_strlen(char *s);
-void						ft_putstr_fd(char *s, int fd);
+
+//timelogs
 void    					ft_display_logs(t_philo *philo,long  time,char *logs);
+long						ft_timer(long start_time);
 
 //ROUTINE
 void	*ft_routine(void *args);
 
 //MONITORING
-void		ft_data_display(t_data *data);
+void	ft_data_display(t_data *data);
 void	ft_monitoring(t_data *data);
 
 //CLEANING

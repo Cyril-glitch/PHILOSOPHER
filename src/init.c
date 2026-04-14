@@ -1,12 +1,6 @@
 #include "../inc/philo.h"
 
-long	ft_gettime(void)
-{
-	struct timeval	tv;
 
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_usec / 1000) + (tv.tv_sec * 1000));
-}
 
 static int	ft_init_settings(int ac, char **av, t_data *data)
 {
@@ -54,25 +48,25 @@ static	int	ft_init_philo(t_data *data)
 	int	i;
 
 	i = 0;
-	data->philos = malloc(sizeof(t_philo) * data->nb_philo);
-	if (!data->philos)
+	data->philo = malloc(sizeof(t_philo) * data->nb_philo);
+	if (!data->philo)
 		return (ft_putstr_fd(BL_RED "MEMMORY ALLOCATION FAIL (PHILOS)" RESET,
 				2), 0);
 	while(i < data->nb_philo)
 	{
-		data->philos[i].id = i + 1;
-		data->philos[i].data = data; 
-		pthread_create(&data->philos[i].thread, NULL, ft_routine, data->philos);
-		data->philos[i].last_meal = 0;
-		data->philos[i].meals_eaten = 0;
+		data->philo[i].id = i + 1;
+		data->philo[i].data = data; 
+		pthread_create(&data->philo[i].thread, NULL, ft_routine, &data->philo[i]);
+		data->philo[i].last_meal = 0;
+		data->philo[i].meals_eaten = 0;
 		if (i == 0)
-			data->philos[i].left_fork = &data->forks[data->nb_philo - 1];
+			data->philo[i].left_fork = &data->forks[data->nb_philo - 1];
 		else
-			data->philos[i].left_fork = &data->forks[i - 1];
+			data->philo[i].left_fork = &data->forks[i - 1];
 		if (i + 1 == data->nb_philo)
-			data->philos[i].right_fork = &data->forks[0];
+			data->philo[i].right_fork = &data->forks[0];
 		else
-			data->philos[i].right_fork = &data->forks[i + 1];
+			data->philo[i].right_fork = &data->forks[i + 1];
 		i++;
 	}
 	return 1;

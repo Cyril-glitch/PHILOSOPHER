@@ -7,7 +7,7 @@ void ft_thread_join(t_data *data)
     i = 0; 
     pthread_join(data->monitor, NULL);
     while (i < data->nb_philo)
-        pthread_join(data->philos[i++].thread, NULL); 
+        pthread_join(data->philo[i++].thread, NULL); 
 }
 
 void    ft_mutex_destroy(t_data *data)
