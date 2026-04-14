@@ -27,6 +27,8 @@ typedef struct s_data
 
 	struct s_philo			*philos;
 
+	pthread_t				monitor;
+
 }							t_data;
 
 typedef struct s_philo
@@ -46,29 +48,30 @@ typedef struct s_philo
 
 //INIT
 int							ft_init_simulation(int ac, char **av, t_data **data);
+long						ft_gettime(void);
 
 //UTILS
 int							ft_isdigit(int c);
 int							ft_isspace(int c);
-int							ft_atoi(const char *nptr);
 int							ft_isfull_dig(char *s);
+int							ft_atoi(const char *nptr);
 
 //UTILS_2
 int							ft_strlen(char *s);
 void						ft_putstr_fd(char *s, int fd);
-void    					ft_display_logs(t_philo *philo,int  time,char *logs);
+void    					ft_display_logs(t_philo *philo,long  time,char *logs);
 
 //ROUTINE
 void	*ft_routine(void *args);
 
 //MONITORING
-void    ft_data_display(t_data *data);
-pthread_t	*ft_monitoring(t_data *data);
+void		ft_data_display(t_data *data);
+void	ft_monitoring(t_data *data);
 
 //CLEANING
 
 
-void ft_thread_join(pthread_t *monitor,t_data *data);
+void 	ft_thread_join(t_data *data);
 void    ft_mutex_destroy(t_data *data);
 
 #endif

@@ -17,9 +17,9 @@ void	ft_putstr_fd(char *s, int fd)
 	write(fd, s, ft_strlen(s));
 }
 
-void    ft_display_logs(t_philo *philo,int  time,char *logs)
+void    ft_display_logs(t_philo *philo,long  time,char *logs)
 {
     pthread_mutex_lock(&philo->data->print_mutex);
-    printf("%d %d %s\n", time, philo->id, logs);
+    printf("%d %ld %s\n", philo->id, time, logs);
     pthread_mutex_unlock(&philo->data->print_mutex);
 }

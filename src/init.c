@@ -1,12 +1,11 @@
 #include "../inc/philo.h"
 
-static void	ft_init_start_time(t_data *data)
+long	ft_gettime(void)
 {
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	data->start_time = tv.tv_sec;
-	printf("start_time = %ld\n", data->start_time);
+	return ((tv.tv_usec / 1000) + (tv.tv_sec * 1000));
 }
 
 static int	ft_init_settings(int ac, char **av, t_data *data)
@@ -17,7 +16,7 @@ static int	ft_init_settings(int ac, char **av, t_data *data)
 	while (i < ac)
 	{
 		if (!ft_isfull_dig(av[i++]))
-			return (ft_putstr_fd(B_L_RED "WRONG ARGUMENT\n" RESET, 2), 0);
+			return (ft_putstr_fd(BL_RED "WRONG ARGUMENT\n" RESET, 2), 0);
 	}
 	data->nb_philo = ft_atoi(av[1]);
 	data->time_to_die = ft_atoi(av[2]);
@@ -40,7 +39,7 @@ static int	ft_init_mutex(t_data *data)
 	i = 0;
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_philo);
 	if (!data->forks)
-		return (ft_putstr_fd(B_L_RED "MEMMORY ALLOCATION FAIL (FORKS)" RESET,
+		return (ft_putstr_fd(BL_RED "MEMMORY ALLOCATION FAIL (FORKS)" RESET,
 				2), 0);
 	while (i < data->nb_philo)
 		pthread_mutex_init(&data->forks[i++], NULL);
@@ -57,7 +56,7 @@ static	int	ft_init_philo(t_data *data)
 	i = 0;
 	data->philos = malloc(sizeof(t_philo) * data->nb_philo);
 	if (!data->philos)
-		return (ft_putstr_fd(B_L_RED "MEMMORY ALLOCATION FAIL (PHILOS)" RESET,
+		return (ft_putstr_fd(BL_RED "MEMMORY ALLOCATION FAIL (PHILOS)" RESET,
 				2), 0);
 	while(i < data->nb_philo)
 	{
@@ -88,7 +87,7 @@ int	ft_init_simulation(int ac, char **av, t_data **data)
 		return (0);
 	if (!ft_init_mutex(*data))
 		return (0);
-	ft_init_start_time(*data);
+	(*data)->start_time = ft_gettime();
 	if (!ft_init_philo(*data))
 		return (0);
 	return (1);

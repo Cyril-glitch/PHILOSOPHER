@@ -1,12 +1,11 @@
 #include    "../inc/philo.h"
 
-void ft_thread_join(pthread_t *monitor,t_data *data)
+void ft_thread_join(t_data *data)
 {
     int i;
 
     i = 0; 
-
-    pthread_join(*monitor, NULL);
+    pthread_join(data->monitor, NULL);
     while (i < data->nb_philo)
         pthread_join(data->philos[i++].thread, NULL); 
 }
