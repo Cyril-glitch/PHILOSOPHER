@@ -1,7 +1,5 @@
 #include "../inc/philo.h"
 
-
-
 static int	ft_init_settings(int ac, char **av, t_data *data)
 {
 	int	i;
@@ -56,20 +54,31 @@ static	int	ft_init_philo(t_data *data)
 	{
 		data->philo[i].id = i + 1;
 		data->philo[i].data = data; 
-		pthread_create(&data->philo[i].thread, NULL, ft_routine, &data->philo[i]);
-		data->philo[i].last_meal = 0;
+		data->philo[i].last_meal = data->start_time;
 		data->philo[i].meals_eaten = 0;
 		if (i == 0)
-			data->philo[i].left_fork = &data->forks[data->nb_philo - 1];
+			data->philo[i].right_fork = &data->forks[data->nb_philo - 1];
 		else
-			data->philo[i].left_fork = &data->forks[i - 1];
+			data->philo[i].right_fork = &data->forks[i - 1];
 		if (i + 1 == data->nb_philo)
-			data->philo[i].right_fork = &data->forks[0];
+			data->philo[i].left_fork = &data->forks[0];
 		else
-			data->philo[i].right_fork = &data->forks[i + 1];
+			data->philo[i].left_fork = &data->forks[i];	
 		i++;
 	}
 	return 1;
+}
+
+void	ft_start_simulation(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while(i < data->nb_philo)
+	{
+		pthread_create(&data->philo[i].thread, NULL, ft_routine, &data->philo[i]);
+		i++;
+	}
 }
 
 int	ft_init_simulation(int ac, char **av, t_data **data)

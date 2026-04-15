@@ -27,9 +27,9 @@ void	ft_data_display(t_data *data)
 		while (j < data->nb_philo)
 		{
 			if (data->philo[i].left_fork == &data->forks[j])
-				fprintf(dash, "left_fork = " CORAL "%d\n" RESET, j);
+				fprintf(dash, "left_fork = " CORAL "%d\n" RESET, j + 1);
 			else if (data->philo[i].right_fork == &data->forks[j])
-				fprintf(dash, "right_fork = " CORAL "%d\n" RESET, j);
+				fprintf(dash, "right_fork = " CORAL "%d\n" RESET, j + 1);
 			j++;
 		}
 		fprintf(dash, "\n");
@@ -40,12 +40,12 @@ void	ft_data_display(t_data *data)
 
 static	int ft_ending(t_philo cur_philo)
 {
-	if ((ft_gettime() - cur_philo.last_meal) > cur_philo.data->time_to_die)
+	if ((ft_duration(cur_philo.last_meal)) >= cur_philo.data->time_to_die)
 	{
-		ft_display_logs(&cur_philo, 0,BL_RED "died" RESET);
+		ft_display_logs(&cur_philo, ft_duration(cur_philo.data->start_time),BL_RED "died" RESET);
 		return 1;
 	}
-	if (cur_philo.meals_eaten >= cur_philo.data->must_eat)
+	if (cur_philo.data->must_eat && (cur_philo.meals_eaten >= cur_philo.data->must_eat))
 	{
 		ft_display_logs(&cur_philo, 0,BL_RED "finish" RESET);
 		return 1;
@@ -74,7 +74,9 @@ static void	*ft_watch_routine(void *args)
 			i++;
 		}
 	}
+	pthread_mutex_lock(&data->stop_mutex);
 	data->stop = 1;
+	pthread_mutex_unlock(&data->stop_mutex);
 	return (NULL);
 }
 
