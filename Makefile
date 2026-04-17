@@ -1,6 +1,6 @@
 NAME = philo
 
-CC = cc
+CC = clang
 CFLAGS = -Wall -Wextra -Werror -fsanitize=thread -g
 OBJ_DIR = obj
 
@@ -10,10 +10,9 @@ SRC = src/main.c \
 	  src/timelogs.c \
 	  src/init.c \
 	  src/routine.c \
+	  src/actions.c \
 	  src/monitoring.c \
-	  src/cleaning.c \
-
-
+	  src/cleaning.c 
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC:.c=.o)))
 
@@ -22,7 +21,7 @@ VPATH = src:.
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -lpthread
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(OBJ_DIR)

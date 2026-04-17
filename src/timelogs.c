@@ -18,7 +18,7 @@ int    ft_display_logs(t_philo *philo,long  time,char *logs)
 	if (ft_isfinish(philo))
 		return 0;
     pthread_mutex_lock(&philo->data->print_mutex);
-    printf("%d %ld %s\n", philo->id, time, logs);
+    printf("%ld %d %s\n",time, philo->id, logs);
     pthread_mutex_unlock(&philo->data->print_mutex);
     return 1;
 }
@@ -26,20 +26,19 @@ int    ft_display_logs(t_philo *philo,long  time,char *logs)
 void    ft_display_end(t_philo *philo,long  time,char *logs)
 {
     pthread_mutex_lock(&philo->data->print_mutex);
-    printf("%d %ld %s\n", philo->id, time, logs);
+    printf("%ld %d %s\n",time, philo->id, logs);
     pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
 void    ft_waiting(long pause,t_philo *cur_philo)
 {
-    int i;
+    long    start;
 
-    i = 0;
-    while (i < (pause))
+    start = ft_gettime();
+    while (ft_duration(start) < (pause))
     {
-        usleep(1000);
+        usleep(1);
         if (ft_isfinish(cur_philo))
             return ;
-        i++;
     }
 }

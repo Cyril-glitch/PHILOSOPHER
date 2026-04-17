@@ -22,6 +22,7 @@ typedef struct s_data
 
 	pthread_mutex_t			stop_mutex;
 	pthread_mutex_t			print_mutex;
+	pthread_mutex_t			meal_mutex;
 
 	pthread_mutex_t			*forks;
 
@@ -48,7 +49,7 @@ typedef struct s_philo
 
 //INIT
 int							ft_init_simulation(int ac, char **av, t_data **data);
-void							ft_start_simulation(t_data *data);
+void						ft_start_simulation(t_data *data);
 long						ft_gettime(void);
 
 //UTILS
@@ -62,15 +63,23 @@ int							ft_atoi(const char *nptr);
 
 //timelogs
 int    						ft_display_logs(t_philo *philo,long  time,char *logs);
+void    					ft_display_end(t_philo *philo,long  time,char *logs);
 long						ft_duration(long last_time);
 void    					ft_waiting(long pause,t_philo *cur_philo);
 
 //ROUTINE
-void	*ft_routine(void *args);
 int		ft_isfinish(t_philo *cur_philo);
+void	*ft_routine(void *args);
+
+//ACTIONS
+int		ft_left_fork(t_philo *cur_philo);
+int		ft_right_fork(t_philo *cur_philo);
+void	ft_meal(t_philo *cur_philo);
+void	ft_sleep(t_philo *cur_philo);
+void	ft_think(t_philo *cur_philo);
 
 //MONITORING
-void	ft_data_display(t_data *data);
+//void	ft_data_display(t_data *data);
 void	ft_monitoring(t_data *data);
 
 //CLEANING

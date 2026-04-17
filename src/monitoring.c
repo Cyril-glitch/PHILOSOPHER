@@ -1,5 +1,6 @@
 #include "../inc/philo.h"
 
+/*
 void	ft_data_display(t_data *data)
 {
 	int		i;
@@ -37,47 +38,69 @@ void	ft_data_display(t_data *data)
 	}
 	fclose(dash);
 }
+*/
 
-static	int ft_ending(t_philo cur_philo)
+static	int ft_died(t_data *data)
 {
-	if ((ft_duration(cur_philo.last_meal)) >= cur_philo.data->time_to_die)
+	int	i;
+	long	last_meal;
+
+	i = 0;
+	last_meal = 0;
+	while(i < data->nb_philo)
 	{
-		ft_display_logs(&cur_philo, ft_duration(cur_philo.data->start_time),BL_RED "died" RESET);
-		return 1;
+		pthread_mutex_lock(&data->meal_mutex);
+		last_meal = data->philo[i].last_meal;
+		pthread_mutex_unlock(&data->meal_mutex);
+		if ((ft_duration(last_meal)) >= data->time_to_die)
+		{
+			ft_display_end(&data->philo[i], ft_duration(data->start_time),BL_RED "died" RESET);
+			return 1;
+		}
+		i++;
 	}
-	if (cur_philo.data->must_eat && (cur_philo.meals_eaten >= cur_philo.data->must_eat))
+	return 0;
+}
+
+static	int ft_satisfied(t_data *data)
+{
+	int	i;
+	int	meals_eaten;
+
+
+	i = 0;
+	meals_eaten = 0;
+	if (!data->must_eat)
+		return 0;
+	while(i < data->nb_philo)
 	{
-		ft_display_logs(&cur_philo, 0,BL_RED "finish" RESET);
-		return 1;
+		pthread_mutex_lock(&data->meal_mutex);
+		meals_eaten = data->philo[i].meals_eaten;
+		pthread_mutex_unlock(&data->meal_mutex);
+		if (meals_eaten < data->must_eat)
+			break;
+		if (i == (data->nb_philo - 1))
+			ft_display_end(&data->philo[i], ft_duration(data->start_time),BL_RED "finish" RESET);
+		i++;
 	}
-	return (0);
+	return (i == data->nb_philo);
 }
 
 static void	*ft_watch_routine(void *args)
 {
-	int						i;
 	t_data					*data;
-	volatile __sig_atomic_t	stop_it;
 
 	data = (t_data *)args;
-	stop_it = 0;
-	i = 0;
-	while (!stop_it)
+	while (1)
 	{
-		i = 0;
-		while (i < data->nb_philo && !stop_it)
-		{	
-			if (ft_ending(data->philo[i]))
-			{
-				stop_it = 1;
-			}
-			i++;
+		if (ft_died(data) || ft_satisfied(data))
+		{
+			pthread_mutex_lock(&data->stop_mutex);
+			data->stop = 1;
+			pthread_mutex_unlock(&data->stop_mutex);
+			return (NULL);
 		}
 	}
-	pthread_mutex_lock(&data->stop_mutex);
-	data->stop = 1;
-	pthread_mutex_unlock(&data->stop_mutex);
-	return (NULL);
 }
 
 void	ft_monitoring(t_data *data)

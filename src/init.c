@@ -37,6 +37,7 @@ static int	ft_init_mutex(t_data *data)
 		pthread_mutex_init(&data->forks[i++], NULL);
 	pthread_mutex_init(&data->stop_mutex, NULL);
 	pthread_mutex_init(&data->print_mutex, NULL);
+	pthread_mutex_init(&data->meal_mutex, NULL);
 
 	return (1);
 }
