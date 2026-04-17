@@ -57,14 +57,8 @@ static	int	ft_init_philo(t_data *data)
 		data->philo[i].data = data; 
 		data->philo[i].last_meal = data->start_time;
 		data->philo[i].meals_eaten = 0;
-		if (i == 0)
-			data->philo[i].right_fork = &data->forks[data->nb_philo - 1];
-		else
-			data->philo[i].right_fork = &data->forks[i - 1];
-		if (i + 1 == data->nb_philo)
-			data->philo[i].left_fork = &data->forks[0];
-		else
-			data->philo[i].left_fork = &data->forks[i];	
+		data->philo[i].left_fork = &data->forks[i];
+		data->philo[i].right_fork = &data->forks[(i + data->nb_philo - 1) % data->nb_philo];	
 		i++;
 	}
 	return 1;
