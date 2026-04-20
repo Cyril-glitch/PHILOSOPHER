@@ -37,8 +37,16 @@ void    ft_waiting(long pause,t_philo *cur_philo)
     start = ft_gettime();
     while (ft_duration(start) < (pause))
     {
-        usleep(1);
         if (ft_isfinish(cur_philo))
             return ;
+        usleep(500);
+    }
+}
+
+void    ft_start_line(long start_time)
+{
+    while (ft_gettime() < start_time)
+    {
+        usleep(100);
     }
 }

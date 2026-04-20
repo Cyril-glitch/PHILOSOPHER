@@ -91,6 +91,7 @@ static void	*ft_watch_routine(void *args)
 	t_data					*data;
 
 	data = (t_data *)args;
+	ft_start_line(data->start_time);
 	while (1)
 	{
 		if (ft_died(data) || ft_satisfied(data))

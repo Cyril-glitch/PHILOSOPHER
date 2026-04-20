@@ -49,7 +49,7 @@ typedef struct s_philo
 
 //INIT
 int							ft_init_simulation(int ac, char **av, t_data **data);
-void						ft_start_simulation(t_data *data);
+int							ft_start_simulation(t_data *data);
 long						ft_gettime(void);
 
 //UTILS
@@ -66,6 +66,7 @@ int    						ft_display_logs(t_philo *philo,long  time,char *logs);
 void    					ft_display_end(t_philo *philo,long  time,char *logs);
 long						ft_duration(long last_time);
 void    					ft_waiting(long pause,t_philo *cur_philo);
+void    					ft_start_line(long start_time);
 
 //ROUTINE
 int		ft_isfinish(t_philo *cur_philo);
@@ -84,6 +85,7 @@ void	ft_monitoring(t_data *data);
 
 //CLEANING
 void 	ft_thread_join(t_data *data);
-void    ft_mutex_destroy(t_data *data);
+void    ft_mutex_destroy(t_data *data, int	to_del);
+void    ft_clean_exit(t_data *data);
 
 #endif

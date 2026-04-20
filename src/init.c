@@ -1,5 +1,6 @@
 #include "../inc/philo.h"
 
+
 static int	ft_init_settings(int ac, char **av, t_data *data)
 {
 	int	i;
@@ -34,11 +35,17 @@ static int	ft_init_mutex(t_data *data)
 		return (ft_putstr_fd(BL_RED "MEMMORY ALLOCATION FAIL (FORKS)" RESET,
 				2), 0);
 	while (i < data->nb_philo)
-		pthread_mutex_init(&data->forks[i++], NULL);
-	pthread_mutex_init(&data->stop_mutex, NULL);
-	pthread_mutex_init(&data->print_mutex, NULL);
-	pthread_mutex_init(&data->meal_mutex, NULL);
-
+	{
+		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
+			return (ft_mutex_destroy(data, i), 0);
+		i++;
+	}
+	if (pthread_mutex_init(&data->stop_mutex, NULL) != 0)
+		return (ft_mutex_destroy(data , i + 1), 0);
+	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
+		return (ft_mutex_destroy(data , i + 2), 0);
+	if (pthread_mutex_init(&data->meal_mutex, NULL) != 0)
+		return (ft_mutex_destroy(data , i + 3), 0);
 	return (1);
 }
 
@@ -64,16 +71,22 @@ static	int	ft_init_philo(t_data *data)
 	return 1;
 }
 
-void	ft_start_simulation(t_data *data)
+int	ft_start_simulation(t_data *data)
 {
 	int	i;
 
 	i = 0;
 	while(i < data->nb_philo)
 	{
-		pthread_create(&data->philo[i].thread, NULL, ft_routine, &data->philo[i]);
+		data->philo[i].thread = 0;
+		if ((pthread_create(&data->philo[i].thread, NULL, ft_routine, &data->philo[i])) != 0)
+		{
+			ft_clean_exit(data);
+			return 0;
+		}
 		i++;
 	}
+	return 1;
 }
 
 int	ft_init_simulation(int ac, char **av, t_data **data)
@@ -85,7 +98,7 @@ int	ft_init_simulation(int ac, char **av, t_data **data)
 		return (0);
 	if (!ft_init_mutex(*data))
 		return (0);
-	(*data)->start_time = ft_gettime();
+	(*data)->start_time = ft_gettime() + 100;
 	if (!ft_init_philo(*data))
 		return (0);
 	return (1);
