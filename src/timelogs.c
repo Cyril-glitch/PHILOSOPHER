@@ -18,6 +18,11 @@ int    ft_display_logs(t_philo *philo,long  time,char *logs)
 	if (ft_isfinish(philo))
 		return 0;
     pthread_mutex_lock(&philo->data->print_mutex);
+    if (ft_isfinish(philo))
+    {
+        pthread_mutex_unlock(&philo->data->print_mutex);
+		return 0;
+    }
     printf("%ld %d %s\n",time, philo->id, logs);
     pthread_mutex_unlock(&philo->data->print_mutex);
     return 1;

@@ -18,7 +18,7 @@ void	*ft_routine(void *args)
 
 	cur_philo = (t_philo *)args;
 	ft_start_line(cur_philo->data->start_time);
-	if (cur_philo->id & 1)
+	if ((cur_philo->id & 1) && cur_philo->data->nb_philo > 1)
 		ft_waiting(cur_philo->data->time_to_eat / 2, cur_philo);
 	while (1)
 	{

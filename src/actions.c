@@ -66,5 +66,5 @@ void	ft_think(t_philo *cur_philo)
 {
 	ft_display_logs(cur_philo, ft_duration(cur_philo->data->start_time),MINT "is " L_PURPLE "thinking" RESET);
 	if (cur_philo->data->nb_philo & 1)
-		usleep(500);
+	ft_waiting(cur_philo->data->time_to_think, cur_philo);
 }

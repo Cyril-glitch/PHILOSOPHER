@@ -54,6 +54,9 @@ static	int ft_died(t_data *data)
 		pthread_mutex_unlock(&data->meal_mutex);
 		if ((ft_duration(last_meal)) >= data->time_to_die)
 		{
+			pthread_mutex_lock(&data->stop_mutex);
+			data->stop = 1;
+			pthread_mutex_unlock(&data->stop_mutex);
 			ft_display_end(&data->philo[i], ft_duration(data->start_time),BL_RED "died" RESET);
 			return 1;
 		}
@@ -80,7 +83,12 @@ static	int ft_satisfied(t_data *data)
 		if (meals_eaten < data->must_eat)
 			break;
 		if (i == (data->nb_philo - 1))
+		{
+			pthread_mutex_lock(&data->stop_mutex);
+			data->stop = 1;
+			pthread_mutex_unlock(&data->stop_mutex);
 			ft_display_end(&data->philo[i], ft_duration(data->start_time),BL_RED "finish" RESET);
+		}
 		i++;
 	}
 	return (i == data->nb_philo);
@@ -94,17 +102,15 @@ static void	*ft_watch_routine(void *args)
 	ft_start_line(data->start_time);
 	while (1)
 	{
-		if (ft_died(data) || ft_satisfied(data))
-		{
-			pthread_mutex_lock(&data->stop_mutex);
-			data->stop = 1;
-			pthread_mutex_unlock(&data->stop_mutex);
+		if (ft_died(data) || ft_satisfied(data))		
 			return (NULL);
-		}
 	}
 }
 
-void	ft_monitoring(t_data *data)
+int	ft_monitoring(t_data *data)
 {
-	pthread_create(&data->monitor, NULL, ft_watch_routine, data);
+	data->monitor = 0;
+	if (pthread_create(&data->monitor, NULL, ft_watch_routine, data) != 0)
+		return (ft_clean_exit(data), 0);
+	return 1;
 }

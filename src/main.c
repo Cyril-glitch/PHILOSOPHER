@@ -10,7 +10,8 @@ int main(int ac, char **av)
         return 1;
     if (!ft_start_simulation(data))
         return 1;
-    ft_monitoring(data);
+    if (!ft_monitoring(data))
+        return 1;
     ft_clean_exit(data);
 
     return 0;

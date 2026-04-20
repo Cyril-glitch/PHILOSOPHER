@@ -35,8 +35,10 @@ void    ft_mutex_destroy(t_data *data, int to_del)
 
 void    ft_clean_exit(t_data *data)
 {
-    ft_mutex_destroy(data, data->nb_philo);
+    if (!data)
+        return ;
     ft_thread_join(data);
+    ft_mutex_destroy(data, data->nb_philo);
     if (data->forks)
         free(data->forks);
     if (data->philo)

@@ -14,6 +14,8 @@ typedef struct s_data
 	int						time_to_die;
 	int						time_to_eat;
 	int						time_to_sleep;
+	int						time_to_sleep;
+
 	int						must_eat;
 
 	long					start_time;
@@ -81,7 +83,7 @@ void	ft_think(t_philo *cur_philo);
 
 //MONITORING
 //void	ft_data_display(t_data *data);
-void	ft_monitoring(t_data *data);
+int		ft_monitoring(t_data *data);
 
 //CLEANING
 void 	ft_thread_join(t_data *data);
