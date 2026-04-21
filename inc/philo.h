@@ -14,7 +14,8 @@ typedef struct s_data
 	int						time_to_die;
 	int						time_to_eat;
 	int						time_to_sleep;
-	int						time_to_sleep;
+
+	int						out_of_play;
 
 	int						must_eat;
 
@@ -73,6 +74,7 @@ void    					ft_start_line(long start_time);
 //ROUTINE
 int		ft_isfinish(t_philo *cur_philo);
 void	*ft_routine(void *args);
+void	*ft_solo_routine(void *args);
 
 //ACTIONS
 int		ft_left_fork(t_philo *cur_philo);
@@ -87,7 +89,7 @@ int		ft_monitoring(t_data *data);
 
 //CLEANING
 void 	ft_thread_join(t_data *data);
-void    ft_mutex_destroy(t_data *data, int	to_del);
+void    ft_mutex_destroy(t_data *data, int n_thrd,int to_del);
 void    ft_clean_exit(t_data *data);
 
 #endif
