@@ -1,22 +1,5 @@
 #include "../inc/philo.h"
 
-int ft_strlen(char *s)
-{
-    int i;
-
-    i = 0;
-    while(s[i])
-        i++;
-    return (i);
-}
-
-void	ft_putstr_fd(char *s, int fd)
-{
-	if (!s)
-		return ;
-	write(fd, s, ft_strlen(s));
-}
-
 int	ft_isdigit(int c)
 {
 	return (c >= '0' && c <= '9');
@@ -26,16 +9,6 @@ int	ft_isspace(int c)
 {
 	return (c == ' ' || c == '\n' || c == '\t'
 		|| c == '\v' || c == '\f' || c == '\r');
-}
-
-int ft_isfull_dig(char *s)
-{
-    while (*s)
-    {
-        if (!ft_isdigit(*(s++)))
-            return (0);
-    }
-    return (1);
 }
 
 int	ft_atoi(const char *nptr)

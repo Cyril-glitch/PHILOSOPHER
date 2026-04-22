@@ -1,18 +1,19 @@
 NAME = philo
 
-CC = clang
-CFLAGS = -Wall -Wextra -Werror -fsanitize=thread -g
+CC = cc
+CFLAGS = -Wall -Wextra -Werror 
 OBJ_DIR = obj
 
 
 SRC = src/main.c \
-	  src/utils.c \
-	  src/timelogs.c \
 	  src/init.c \
+	  src/atoi.c \
+	  src/error.c \
+	  src/time.c \
 	  src/routine.c \
 	  src/actions.c \
 	  src/monitoring.c \
-	  src/cleaning.c 
+	  src/cleaning.c   
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC:.c=.o)))
 

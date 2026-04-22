@@ -3,7 +3,7 @@
 int	ft_right_fork(t_philo *cur_philo)
 {
 	pthread_mutex_lock(cur_philo->right_fork);
-	if (!ft_display_logs(cur_philo, ft_duration(cur_philo->data->start_time),MINT "has taken right fork" RESET))
+	if (!ft_display_logs(cur_philo, ft_duration(cur_philo->data->start_time),MINT "has taken a fork" RESET))
 	{
 		pthread_mutex_unlock(cur_philo->right_fork);
 		if (cur_philo->left_fork < cur_philo->right_fork)
@@ -16,7 +16,7 @@ int	ft_right_fork(t_philo *cur_philo)
 int	ft_left_fork(t_philo *cur_philo)
 {
 	pthread_mutex_lock(cur_philo->left_fork);
-	if (!ft_display_logs(cur_philo, ft_duration(cur_philo->data->start_time),MINT "has taken left fork" RESET))
+	if (!ft_display_logs(cur_philo, ft_duration(cur_philo->data->start_time),MINT "has taken a fork" RESET))
 	{
 		pthread_mutex_unlock(cur_philo->left_fork);
 		if (cur_philo->left_fork > cur_philo->right_fork)
@@ -67,12 +67,10 @@ void	ft_think(t_philo *cur_philo)
 
 	time_to_think = 0;
 	ft_display_logs(cur_philo, ft_duration(cur_philo->data->start_time),MINT "is " L_PURPLE "thinking" RESET);
-	if (cur_philo->data->out_of_play)
+	if (cur_philo->data->nb_philo & 1)
 	{
-		time_to_think = cur_philo->data->out_of_play - (cur_philo->data->time_to_eat + cur_philo->data->time_to_sleep);
-		ft_waiting(time_to_think, cur_philo);	
-		usleep(500);
+		time_to_think = cur_philo->data->time_to_eat - cur_philo->data->time_to_sleep;	
+		if (time_to_think)
+			ft_waiting(time_to_think - 3, cur_philo);	
 	}	
 }
-
-

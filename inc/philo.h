@@ -15,8 +15,6 @@ typedef struct s_data
 	int						time_to_eat;
 	int						time_to_sleep;
 
-	int						out_of_play;
-
 	int						must_eat;
 
 	long					start_time;
@@ -53,23 +51,18 @@ typedef struct s_philo
 //INIT
 int							ft_init_simulation(int ac, char **av, t_data **data);
 int							ft_start_simulation(t_data *data);
-long						ft_gettime(void);
 
-//UTILS
-
-int							ft_strlen(char *s);
-void						ft_putstr_fd(char *s, int fd);
+//ATOI
 int							ft_isdigit(int c);
 int							ft_isspace(int c);
-int							ft_isfull_dig(char *s);
 int							ft_atoi(const char *nptr);
 
-//timelogs
+//TIME
 int    						ft_display_logs(t_philo *philo,long  time,char *logs);
-void    					ft_display_end(t_philo *philo,long  time,char *logs);
 long						ft_duration(long last_time);
 void    					ft_waiting(long pause,t_philo *cur_philo);
 void    					ft_start_line(long start_time);
+long						ft_gettime(void);
 
 //ROUTINE
 int		ft_isfinish(t_philo *cur_philo);
@@ -91,5 +84,11 @@ int		ft_monitoring(t_data *data);
 void 	ft_thread_join(t_data *data);
 void    ft_mutex_destroy(t_data *data, int n_thrd,int to_del);
 void    ft_clean_exit(t_data *data);
+
+//ERROR
+int    						ft_overflow(t_data *data);
+int							ft_strlen(char *s);
+void						ft_putstr_fd(char *s, int fd);
+int							ft_isfull_dig(char *s);
 
 #endif
