@@ -3,7 +3,7 @@
 # 🍴 Philosophers - Technical Documentation
 
 ## 1. Description
-**Philosophers** est une introduction aux bases de la programmation multithreadée et de la gestion de la mémoire partagée. Le projet illustre le célèbre problème du **Dîner des Philosophes** d'Edsger Dijkstra, mettant en lumière les défis liés à la synchronisation des threads, aux mutex et à l'évitement des conditions de concurrence (race conditions) et des verrous mortels (deadlocks).
+**Philosophers** is an introduction to the basics of multi-threaded programming and shared memory management. The project illustrates Edsger Dijkstra's famous **Dining Philosophers problem**, highlighting the challenges of thread synchronization, mutexes, and the prevention of race conditions and deadlocks.
 
 <p align="center">
   <img src="./assets/demo.gif" alt="PHILO Demo" height="100%" width="100%">
@@ -14,63 +14,63 @@
 <br />
 
 ## 2. Technical Instructions & Features
-Le projet a été conçu pour répondre aux exigences strictes du sujet de 42 :
+The project was designed to meet the strict requirements of the 42 subject:
 
 ---
 
 <br />
 
-* **Multi-threading**: Chaque philosophe est représenté par un thread indépendant s'exécutant en parallèle.
-* **Gestion des Mutex**: Utilisation de `pthread_mutex_t` pour protéger l'accès aux fourchettes et aux variables partagées (statut de la simulation, dernier repas).
-* **Surveillance en Temps Réel**: Un thread de monitoring dédié surveille l'état de chaque philosophe pour détecter un décès en moins de 10ms.
-* **Évitement de la Famine**: Implémentation de stratégies d'ordonnancement (anti-queue) pour garantir que chaque philosophe puisse manger.
-* **Optimisation CPU**: Utilisation de "Smart Sleep" et de délais calculés pour minimiser l'utilisation du processeur sans sacrifier la précision du temps.
+* **Multi-threading**: Each philosopher is represented by an independent thread running in parallel.
+* **Mutex Management**: Use of `pthread_mutex_t` to protect access to forks and shared variables (simulation status, last meal time).
+* **Real-Time Monitoring**: A dedicated monitoring thread tracks the state of each philosopher to detect death within a 10ms margin.
+* **Starvation Avoidance**: Implementation of scheduling strategies (anti-queue) to ensure that every philosopher has a fair chance to eat.
+* **CPU Optimization**: Use of "Smart Sleep" and calculated delays to minimize CPU usage without sacrificing timing precision.
 
 ---
 
 <br />
 
 ## 3. Resources & Technical Choices
-Notre implémentation suit des décisions techniques spécifiques pour optimiser la stabilité :
+Our implementation follows specific technical decisions to optimize stability under heavy load:
 
 ---
 
 <br />
 
 ### 🧠 Centralized Memory Management (The `t_data` Structure)
-* **Accès Unifié**: Toutes les configurations (temps de mort, manger, dormir) et les mutex de contrôle sont regroupés dans une structure centrale accessible par tous les threads.
-* **Protection des Données**: Chaque accès à une variable partagée est systématiquement encapsulé dans un verrouillage de mutex (`stop_mutex`, `meal_mutex`, `print_mutex`).
+* **Unified Access**: All configurations (time to die, eat, sleep) and control mutexes are grouped into a central structure accessible by all threads.
+* **Data Protection**: Every access to a shared variable is systematically encapsulated within a mutex lock (`stop_mutex`, `meal_mutex`, `print_mutex`).
 
 ---
 
 <br />
 
 ### ⚖️ Anti-Deadlock Strategy
-* **Tri des Fourchettes**: Pour éviter l'interblocage (Circular Wait), les philosophes ramassent leurs fourchettes selon l'adresse mémoire la plus basse en premier.
-* **Déphasage des Threads**: Un système de `ft_anti_queue` fait attendre les philosophes avec un ID impair au démarrage pour éviter une saturation immédiate des ressources à T=0.
-* **Calcul du Temps de Pensée**: Un temps de pensée dynamique est calculé pour les configurations impaires afin de synchroniser les cycles de repas.
+* **Fork Sorting**: To avoid Circular Wait (deadlock), philosophers pick up their forks according to the lowest memory address first.
+* **Thread Staggering**: An `ft_anti_queue` system delays odd-ID philosophers at startup using a clean `usleep` to prevent immediate resource saturation at T=0.
+* **Dynamic Thinking Time**: For odd numbers of philosophers, a thinking time is calculated as `((time_to_eat * 3) / 2) - time_to_sleep` to synchronize meal cycles and reduce fork contention.
 
 ---
 
 <br />
 
 ### ⏱️ Time Management & Precision
-* **Gettimeofday**: Utilisation de la précision milliseconde pour le suivi du cycle de vie.
-* **Attente Passive**: La fonction `ft_waiting` fragmente les temps d'attente en petits intervalles (`usleep`) pour rester réactif aux signaux de fin de simulation tout en économisant le CPU.
+* **Gettimeofday**: Use of millisecond precision for lifecycle tracking.
+* **Passive Waiting**: The `ft_waiting` function fragments wait times into small intervals to remain responsive to simulation end signals while significantly reducing Context Switching.
 
 ---
 
 <br />
 
 ### 🛠️ Authorized Functions
-Ce projet est construit strictement à l'aide des fonctions système autorisées : `memset`, `printf`, `malloc`, `free`, `write`, `usleep`, `gettimeofday`, `pthread_create`, `pthread_detach`, `pthread_join`, `pthread_mutex_init`, `pthread_mutex_destroy`, `pthread_mutex_lock`, `pthread_mutex_unlock`.
+This project is built strictly using the authorized system functions: `memset`, `printf`, `malloc`, `free`, `write`, `usleep`, `gettimeofday`, `pthread_create`, `pthread_detach`, `pthread_join`, `pthread_mutex_init`, `pthread_mutex_destroy`, `pthread_mutex_lock`, `pthread_mutex_unlock`.
 
 ---
 
 <br />
 
 ## 📈 How to Compile and Run
-Pour compiler et lancer la simulation, utilisez les commandes suivantes :
+To compile and launch the simulation, use the following commands:
 
 ---
 
