@@ -87,3 +87,21 @@ make
 # Run the simulation
 # Format: ./philo [nb_philos] [time_to_die] [time_to_eat] [time_to_sleep] [optional: nb_meals]
 ./philo 199 610 200 200
+```
+---
+
+<br />
+
+## 📚 Resources
+Here are the essential references and tools used to understand the core concepts of this project:
+
+---
+
+<br />
+
+* **Official Documentation**:
+    * [Unix Threads (pthreads) Programming](https://llnl.gov/computing/tutorials/pthreads/) - A comprehensive guide to POSIX threads and synchronization.
+* **Articles & Tutorials**:
+    * [The Dining Philosophers Problem](https://en.wikipedia.org/wiki/Dining_philosophers_problem) - Wikipedia's overview of the synchronization challenge.
+    * [Context Switch](https://en.wikipedia.org/wiki/Context_switch) - Understanding how the OS manages multiple threads on a CPU.
+    * [Philosophers Visualizer](https://nafuka11.github.io/philosophers-visualizer/) - A professional tool to visualize thread behavior and detect potential deadlocks.
