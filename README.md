@@ -6,7 +6,7 @@
 **Philosophers** is an introduction to the basics of multi-threaded programming and shared memory management. The project illustrates Edsger Dijkstra's famous **Dining Philosophers problem**, highlighting the challenges of thread synchronization, mutexes, and the prevention of race conditions and deadlocks.
 
 <p align="center">
-  <img src="./assets/demo2.gif" alt="PHILO Demo" height="100%" width="100%">
+  <img src="./assets/DEMO.gif" alt="PHILO Demo" height="100%" width="100%">
 </p>
 
 ---
