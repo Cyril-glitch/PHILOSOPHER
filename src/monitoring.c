@@ -1,4 +1,95 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   monitoring.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cycolonn <cycolonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/23 11:36:22 by cycolonn          #+#    #+#             */
+/*   Updated: 2026/04/23 11:36:29 by cycolonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/philo.h"
+
+static void	ft_display_end(t_philo *philo, long time, char *logs)
+{
+	pthread_mutex_lock(&philo->data->print_mutex);
+	printf("%ld %d %s\n", time, philo->id, logs);
+	pthread_mutex_unlock(&philo->data->print_mutex);
+}
+
+static int	ft_died(t_data *data)
+{
+	int		i;
+	long	last_meal;
+
+	i = 0;
+	last_meal = 0;
+	while (i < data->nb_philo)
+	{
+		pthread_mutex_lock(&data->meal_mutex);
+		last_meal = data->philo[i].last_meal;
+		pthread_mutex_unlock(&data->meal_mutex);
+		if ((ft_duration(last_meal)) >= data->time_to_die)
+		{
+			pthread_mutex_lock(&data->stop_mutex);
+			data->stop = 1;
+			pthread_mutex_unlock(&data->stop_mutex);
+			ft_display_end(&data->philo[i], ft_duration(data->start_time),
+				BL_RED "died" RESET);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+static int	ft_satisfied(t_data *data)
+{
+	int	i;
+	int	meals_eaten;
+
+	i = 0;
+	meals_eaten = 0;
+	if (!data->must_eat)
+		return (0);
+	while (i < data->nb_philo)
+	{
+		pthread_mutex_lock(&data->meal_mutex);
+		meals_eaten = data->philo[i].meals_eaten;
+		pthread_mutex_unlock(&data->meal_mutex);
+		if (meals_eaten < data->must_eat)
+			break ;
+		if (i == (data->nb_philo - 1))
+		{
+			pthread_mutex_lock(&data->stop_mutex);
+			data->stop = 1;
+			pthread_mutex_unlock(&data->stop_mutex);
+		}
+		i++;
+	}
+	return (i == data->nb_philo);
+}
+
+static void	*ft_watch_routine(void *args)
+{
+	t_data	*data;
+
+	data = (t_data *)args;
+	ft_start_line(data->start_time);
+	while (!ft_died(data) && !ft_satisfied(data))
+		usleep(1000);
+	return (NULL);
+}
+
+int	ft_monitoring(t_data *data)
+{
+	data->monitor = 0;
+	if (pthread_create(&data->monitor, NULL, ft_watch_routine, data) != 0)
+		return (ft_clean_exit(data), 0);
+	return (1);
+}
 
 /*
 void	ft_data_display(t_data *data)
@@ -39,156 +130,3 @@ void	ft_data_display(t_data *data)
 	fclose(dash);
 }
 */
-
-static	void    ft_display_end(t_philo *philo,long  time,char *logs)
-{
-    pthread_mutex_lock(&philo->data->print_mutex);
-    printf("%ld %d %s\n",time, philo->id, logs);
-    pthread_mutex_unlock(&philo->data->print_mutex);
-}
-
-/*
-
-static	int ft_died(t_data *data)
-{
-	int	i;
-	long	last_meal;
-
-	i = 0;
-	last_meal = 0;
-	while(i < data->nb_philo)
-	{
-		last_meal = data->philo[i].last_meal;
-		if ((ft_duration(last_meal)) >= data->time_to_die)
-		{
-			pthread_mutex_lock(&data->stop_mutex);
-			data->stop = 1;
-			pthread_mutex_unlock(&data->stop_mutex);
-			ft_display_end(&data->philo[i], ft_duration(data->start_time),BL_RED "died" RESET);
-			return 1;
-		}
-		i++;
-	}
-	return 0;
-}
-
-static	int ft_satisfied(t_data *data)
-{
-	int	i;
-	int	meals_eaten;
-
-
-	i = 0;
-	meals_eaten = 0;
-	if (!data->must_eat)
-		return 0;
-	while(i < data->nb_philo)
-	{	
-		meals_eaten = data->philo[i].meals_eaten;
-		if (meals_eaten < data->must_eat)
-			break;
-		if (i == (data->nb_philo - 1))
-		{
-			pthread_mutex_lock(&data->stop_mutex);
-			data->stop = 1;
-			pthread_mutex_unlock(&data->stop_mutex);
-		}
-		i++;
-	}
-	return (i == data->nb_philo);
-}
-
-static void	*ft_watch_routine(void *args)
-{
-	t_data					*data;
-
-	data = (t_data *)args;
-	ft_start_line(data->start_time);
-	while (1)		
-	{
-		pthread_mutex_lock(&data->meal_mutex);
-		if (ft_died(data) || ft_satisfied(data))		
-		{
-			pthread_mutex_unlock(&data->meal_mutex);
-			return (NULL);
-		}
-		pthread_mutex_unlock(&data->meal_mutex);
-		usleep(1000);
-	}
-	return (NULL);
-}
-*/
-
-static	int ft_died(t_data *data)
-{
-	int	i;
-	long	last_meal;
-
-	i = 0;
-	last_meal = 0;
-	while(i < data->nb_philo)
-	{
-		pthread_mutex_lock(&data->meal_mutex);
-		last_meal = data->philo[i].last_meal;
-		pthread_mutex_unlock(&data->meal_mutex);
-		if ((ft_duration(last_meal)) >= data->time_to_die)
-		{
-			pthread_mutex_lock(&data->stop_mutex);
-			data->stop = 1;
-			pthread_mutex_unlock(&data->stop_mutex);
-			ft_display_end(&data->philo[i], ft_duration(data->start_time),BL_RED "died" RESET);
-			return 1;
-		}
-		i++;
-	}
-	return 0;
-}
-
-static	int ft_satisfied(t_data *data)
-{
-	int	i;
-	int	meals_eaten;
-
-
-	i = 0;
-	meals_eaten = 0;
-	if (!data->must_eat)
-		return 0;
-	while(i < data->nb_philo)
-	{
-		pthread_mutex_lock(&data->meal_mutex);
-		meals_eaten = data->philo[i].meals_eaten;
-		pthread_mutex_unlock(&data->meal_mutex);
-		if (meals_eaten < data->must_eat)
-			break;
-		if (i == (data->nb_philo - 1))
-		{
-			pthread_mutex_lock(&data->stop_mutex);
-			data->stop = 1;
-			pthread_mutex_unlock(&data->stop_mutex);	
-		}
-		i++;
-	}
-	return (i == data->nb_philo);
-}
-
-static void	*ft_watch_routine(void *args)
-{
-	t_data					*data;
-
-	data = (t_data *)args;
-	ft_start_line(data->start_time);
-	while (1)
-	{
-		if (ft_died(data) || ft_satisfied(data))		
-			return (NULL);
-	}
-}
-
-int	ft_monitoring(t_data *data)
-{
-	data->monitor = 0;
-	if (pthread_create(&data->monitor, NULL, ft_watch_routine, data) != 0)
-		return (ft_clean_exit(data), 0);
-	return 1;
-}

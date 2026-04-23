@@ -1,5 +1,16 @@
-#include "../inc/philo.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cycolonn <cycolonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/23 11:37:25 by cycolonn          #+#    #+#             */
+/*   Updated: 2026/04/23 11:40:42 by cycolonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "../inc/philo.h"
 
 static int	ft_init_settings(int ac, char **av, t_data *data)
 {
@@ -21,9 +32,9 @@ static int	ft_init_settings(int ac, char **av, t_data *data)
 	else
 		data->must_eat = 0;
 	data->stop = 0;
-    data->start_time = 0;
+	data->start_time = 0;
 	if (ft_overflow(data))
-		return 0;
+		return (0);
 	return (1);
 }
 
@@ -36,8 +47,8 @@ static int	ft_init_mutex(t_data *data)
 	if (!data->forks)
 	{
 		free(data);
-		return (ft_putstr_fd(BL_RED "MEMMORY ALLOCATION FAIL (FORKS)" RESET,
-				2), 0);
+		return (ft_putstr_fd(BL_RED "MEMMORY ALLOCATION FAIL (FORKS)" RESET, 2),
+			0);
 	}
 	while (i < data->nb_philo)
 	{
@@ -46,15 +57,15 @@ static int	ft_init_mutex(t_data *data)
 		i++;
 	}
 	if (pthread_mutex_init(&data->stop_mutex, NULL) != 0)
-		return (ft_mutex_destroy(data ,i, 1), 0);
+		return (ft_mutex_destroy(data, i, 1), 0);
 	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
-		return (ft_mutex_destroy(data ,i, 2), 0);
+		return (ft_mutex_destroy(data, i, 2), 0);
 	if (pthread_mutex_init(&data->meal_mutex, NULL) != 0)
-		return (ft_mutex_destroy(data ,i, 3), 0);
+		return (ft_mutex_destroy(data, i, 3), 0);
 	return (1);
 }
 
-static	int	ft_init_philo(t_data *data)
+static int	ft_init_philo(t_data *data)
 {
 	int	i;
 
@@ -62,47 +73,49 @@ static	int	ft_init_philo(t_data *data)
 	data->philo = malloc(sizeof(t_philo) * data->nb_philo);
 	if (!data->philo)
 	{
-    	ft_mutex_destroy(data, 0,3);
+		ft_mutex_destroy(data, 0, 3);
 		free(data);
 		return (ft_putstr_fd(BL_RED "MEMMORY ALLOCATION FAIL (PHILOS)" RESET,
 				2), 0);
 	}
-	while(i < data->nb_philo)
+	while (i < data->nb_philo)
 	{
 		data->philo[i].id = i + 1;
-		data->philo[i].data = data; 
+		data->philo[i].data = data;
 		data->philo[i].last_meal = data->start_time;
-		data->philo[i].meals_eaten = 0;	
-		data->philo[i].right_fork = &data->forks[(i + data->nb_philo - 1) % data->nb_philo];	
+		data->philo[i].meals_eaten = 0;
+		data->philo[i].right_fork = &data->forks[(i + data->nb_philo - 1)
+			% data->nb_philo];
 		if (data->nb_philo == 1)
-			break;
+			break ;
 		data->philo[i].left_fork = &data->forks[i];
 		i++;
 	}
-	return 1;
+	return (1);
 }
 
 int	ft_start_simulation(t_data *data)
 {
-	int	i;
-	void *routine;
+	int		i;
+	void	*routine;
 
 	i = 0;
 	if (data->nb_philo == 1)
 		routine = ft_solo_routine;
-	else 
-		routine = ft_routine;	
-	while(i < data->nb_philo)
+	else
+		routine = ft_routine;
+	while (i < data->nb_philo)
 	{
 		data->philo[i].thread = 0;
-		if ((pthread_create(&data->philo[i].thread, NULL, routine, &data->philo[i])) != 0)
+		if ((pthread_create(&data->philo[i].thread, NULL, routine,
+					&data->philo[i])) != 0)
 		{
 			ft_clean_exit(data);
-			return 0;
+			return (0);
 		}
 		i++;
 	}
-	return 1;
+	return (1);
 }
 
 int	ft_init_simulation(int ac, char **av, t_data **data)

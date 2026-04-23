@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   atoi.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cycolonn <cycolonn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/23 11:36:49 by cycolonn          #+#    #+#             */
+/*   Updated: 2026/04/23 11:43:34 by cycolonn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/philo.h"
 
 int	ft_isdigit(int c)
@@ -7,8 +19,8 @@ int	ft_isdigit(int c)
 
 int	ft_isspace(int c)
 {
-	return (c == ' ' || c == '\n' || c == '\t'
-		|| c == '\v' || c == '\f' || c == '\r');
+	return (c == ' ' || c == '\n' || c == '\t' || c == '\v' || c == '\f'
+		|| c == '\r');
 }
 
 int	ft_atoi(const char *nptr)
@@ -30,7 +42,7 @@ int	ft_atoi(const char *nptr)
 	}
 	while (ft_isdigit(nptr[i]))
 	{
-		res *= 10 ;
+		res *= 10;
 		res += nptr[i] - '0';
 		i++;
 	}
