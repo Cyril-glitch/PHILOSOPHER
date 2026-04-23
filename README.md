@@ -78,7 +78,7 @@ To compile and launch the simulation, use the following commands:
 
 ```bash
 # Clone the repo
-git clone [https://github.com/Cyril-glitch/philosophers.git](https://github.com/Cyril-glitch/philosophers.git)
+git clone https://github.com/Cyril-glitch/PHILOSOPHER.git
 
 # Compile the project
 cd philosophers
