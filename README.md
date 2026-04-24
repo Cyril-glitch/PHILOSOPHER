@@ -26,6 +26,28 @@ The project was designed to meet the strict requirements of the 42 subject:
 * **Starvation Avoidance**: Implementation of scheduling strategies (anti-queue) to ensure that every philosopher has a fair chance to eat.
 * **CPU Optimization**: Use of "Smart Sleep" and calculated delays to minimize CPU usage without sacrificing timing precision.
 
+<br />
+
+## 📈 How to Compile and Run
+To compile and launch the simulation, use the following commands:
+
+---
+
+<br />
+
+```bash
+# Clone the repo
+git clone https://github.com/Cyril-glitch/PHILOSOPHER.git
+
+# Compile the project
+cd philosophers
+make
+
+# Run the simulation
+# Format: ./philo [nb_philos] [time_to_die] [time_to_eat] [time_to_sleep] [optional: nb_meals]
+./philo 199 610 200 200
+```
+
 ---
 
 <br />
@@ -67,28 +89,6 @@ This project is built strictly using the authorized system functions: `memset`, 
 
 ---
 
-<br />
-
-## 📈 How to Compile and Run
-To compile and launch the simulation, use the following commands:
-
----
-
-<br />
-
-```bash
-# Clone the repo
-git clone https://github.com/Cyril-glitch/PHILOSOPHER.git
-
-# Compile the project
-cd philosophers
-make
-
-# Run the simulation
-# Format: ./philo [nb_philos] [time_to_die] [time_to_eat] [time_to_sleep] [optional: nb_meals]
-./philo 199 610 200 200
-```
----
 
 <br />
 
